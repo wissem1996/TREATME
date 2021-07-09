@@ -2,10 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PatientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=PatientRepository::class)
  */
 class Patient
@@ -20,55 +24,146 @@ class Patient
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $nom;
+    private $patient_name;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $prenom;
+    private $gender;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $contact;
+    private $Date_of_birth;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $blood_group;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $mobile_number;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $email;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Appointment::class, mappedBy="Patient", orphanRemoval=true)
+     */
+    private $yes;
+
+    public function __construct()
+    {
+        $this->yes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getPatientName(): ?string
     {
-        return $this->nom;
+        return $this->patient_name;
     }
 
-    public function setNom(string $nom): self
+    public function setPatientName(string $patient_name): self
     {
-        $this->nom = $nom;
+        $this->patient_name = $patient_name;
 
         return $this;
     }
 
-    public function getPrenom(): ?string
+    public function getGender(): ?string
     {
-        return $this->prenom;
+        return $this->gender;
     }
 
-    public function setPrenom(string $prenom): self
+    public function setGender(string $gender): self
     {
-        $this->prenom = $prenom;
+        $this->gender = $gender;
 
         return $this;
     }
 
-    public function getContact(): ?string
+    public function getDateOfBirth(): ?string
     {
-        return $this->contact;
+        return $this->Date_of_birth;
     }
 
-    public function setContact(string $contact): self
+    public function setDateOfBirth(string $Date_of_birth): self
     {
-        $this->contact = $contact;
+        $this->Date_of_birth = $Date_of_birth;
+
+        return $this;
+    }
+
+    public function getBloodGroup(): ?string
+    {
+        return $this->blood_group;
+    }
+
+    public function setBloodGroup(string $blood_group): self
+    {
+        $this->blood_group = $blood_group;
+
+        return $this;
+    }
+
+    public function getMobileNumber(): ?string
+    {
+        return $this->mobile_number;
+    }
+
+    public function setMobileNumber(string $mobile_number): self
+    {
+        $this->mobile_number = $mobile_number;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Appointment[]
+     */
+    public function getYes(): Collection
+    {
+        return $this->yes;
+    }
+
+    public function addYe(Appointment $ye): self
+    {
+        if (!$this->yes->contains($ye)) {
+            $this->yes[] = $ye;
+            $ye->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeYe(Appointment $ye): self
+    {
+        if ($this->yes->removeElement($ye)) {
+            // set the owning side to null (unless already changed)
+            if ($ye->getPatient() === $this) {
+                $ye->setPatient(null);
+            }
+        }
 
         return $this;
     }
