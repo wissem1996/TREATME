@@ -5,9 +5,18 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\AppointmentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * normalizationContext={"groups"={"read:appointment"}},
+ * collectionOperations={"get","post"={"denormalization_context"={"groups"={"write : appointment"}}}
+ * 
+ * },
+ *  itemOperations={"get"={"normalization_context"={"groups"={"read:appointment:item" , "read:patient" , "read:doctor"}}},
+ * "put","patch"={"denormalization_context"={"groups"={"update : appointment"}}}
+ * ,"delete"}
+ * )
  * @ORM\Entity(repositoryClass=AppointmentRepository::class)
  */
 class Appointment
@@ -16,48 +25,55 @@ class Appointment
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read:appointment:item","read:appointment","write : appointment" , "readappointments"})
      */
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Doctor::class, inversedBy="yes")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Doctor::class, inversedBy="appointments")
+     *@Groups({"read:appointment:item","read:appointment","write : appointment" , "update : appointment"})
      */
-    private $Doctor;
+    private $doctor;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Patient::class, inversedBy="yes")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Patient::class, inversedBy="appointments")
+     * @Groups({"read:appointment:item","read:appointment","write : appointment"})
      */
-    private $Patient;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $Title;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $start_date;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $end_date;
+    private $patient;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read:appointment:item","read:appointment","write : appointment" , "readappointments"})
      */
-    private $repeat_time;
+    private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read:appointment:item","read:appointment","write : appointment"})
+     */
+    private $startdate;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read:appointment:item","read:appointment","write : appointment"})
+     */
+    private $enddate;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read:appointment:item","read:appointment","write : appointment"})
+     */
+    private $repeattime;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read:appointment:item","read:appointment","write : appointment","update : appointment"})
      */
     private $symptom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *@Groups({"read:appointment:item","read:appointment","write : appointment","update : appointment"})
      */
     private $location;
 
@@ -68,72 +84,72 @@ class Appointment
 
     public function getDoctor(): ?Doctor
     {
-        return $this->Doctor;
+        return $this->doctor;
     }
 
-    public function setDoctor(?Doctor $Doctor): self
+    public function setDoctor(?Doctor $doctor): self
     {
-        $this->Doctor = $Doctor;
+        $this->doctor = $doctor;
 
         return $this;
     }
 
     public function getPatient(): ?Patient
     {
-        return $this->Patient;
+        return $this->patient;
     }
 
-    public function setPatient(?Patient $Patient): self
+    public function setPatient(?Patient $patient): self
     {
-        $this->Patient = $Patient;
+        $this->patient = $patient;
 
         return $this;
     }
 
     public function getTitle(): ?string
     {
-        return $this->Title;
+        return $this->title;
     }
 
-    public function setTitle(string $Title): self
+    public function setTitle(string $title): self
     {
-        $this->Title = $Title;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getStartDate(): ?\DateTimeInterface
+    public function getStartdate(): ?string
     {
-        return $this->start_date;
+        return $this->startdate;
     }
 
-    public function setStartDate(\DateTimeInterface $start_date): self
+    public function setStartdate(string $startdate): self
     {
-        $this->start_date = $start_date;
+        $this->startdate = $startdate;
 
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeInterface
+    public function getEnddate(): ?string
     {
-        return $this->end_date;
+        return $this->enddate;
     }
 
-    public function setEndDate(\DateTimeInterface $end_date): self
+    public function setEnddate(string $enddate): self
     {
-        $this->end_date = $end_date;
+        $this->enddate = $enddate;
 
         return $this;
     }
 
-    public function getRepeatTime(): ?string
+    public function getRepeattime(): ?string
     {
-        return $this->repeat_time;
+        return $this->repeattime;
     }
 
-    public function setRepeatTime(string $repeat_time): self
+    public function setRepeattime(string $repeattime): self
     {
-        $this->repeat_time = $repeat_time;
+        $this->repeattime = $repeattime;
 
         return $this;
     }

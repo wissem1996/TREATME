@@ -7,9 +7,18 @@ use App\Repository\DoctorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * normalizationContext={"groups"={"read:doctor:collections"}},
+ * collectionOperations={"get","post"={"denormalization_context"={"groups"={"write : doctor"}}}
+ * 
+ * },
+ *  itemOperations={"get"={"normalization_context"={"groups"={"read:doctor:item" , "readappointments"}}},
+ * "put","patch"={"denormalization_context"={"groups"={"update : doctor"}}}
+ * ,"delete"}
+ * )
  * @ORM\Entity(repositoryClass=DoctorRepository::class)
  */
 class Doctor
@@ -18,67 +27,79 @@ class Doctor
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read:doctor:collections"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read:doctor","read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
      */
-    private $doctor_name;
+    private $doctorname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
      */
     private $gender;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
      */
-    private $mobile_phone;
+    private $mobilephone;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
      */
-    private $department;
+    private $departement;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
      */
     private $education;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
      */
     private $experience;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
      */
     private $designation;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
      */
-    private $duty_timing;
+    private $dutytiming;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
      */
-    private $specialisation;
+    private $specilaisation;
 
     /**
-     * @ORM\OneToMany(targetEntity=Appointment::class, mappedBy="Doctor", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Appointment::class, mappedBy="doctor")
+     *  @Groups({"read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
      */
-    private $yes;
+    private $appointments;
 
     public function __construct()
     {
-        $this->yes = new ArrayCollection();
+        $this->appointments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,14 +107,14 @@ class Doctor
         return $this->id;
     }
 
-    public function getDoctorName(): ?string
+    public function getDoctorname(): ?string
     {
-        return $this->doctor_name;
+        return $this->doctorname;
     }
 
-    public function setDoctorName(string $doctor_name): self
+    public function setDoctorname(string $doctorname): self
     {
-        $this->doctor_name = $doctor_name;
+        $this->doctorname = $doctorname;
 
         return $this;
     }
@@ -110,14 +131,14 @@ class Doctor
         return $this;
     }
 
-    public function getMobilePhone(): ?string
+    public function getMobilephone(): ?string
     {
-        return $this->mobile_phone;
+        return $this->mobilephone;
     }
 
-    public function setMobilePhone(string $mobile_phone): self
+    public function setMobilephone(string $mobilephone): self
     {
-        $this->mobile_phone = $mobile_phone;
+        $this->mobilephone = $mobilephone;
 
         return $this;
     }
@@ -134,14 +155,14 @@ class Doctor
         return $this;
     }
 
-    public function getDepartment(): ?string
+    public function getDepartement(): ?string
     {
-        return $this->department;
+        return $this->departement;
     }
 
-    public function setDepartment(string $department): self
+    public function setDepartement(string $departement): self
     {
-        $this->department = $department;
+        $this->departement = $departement;
 
         return $this;
     }
@@ -182,26 +203,26 @@ class Doctor
         return $this;
     }
 
-    public function getDutyTiming(): ?string
+    public function getDutytiming(): ?string
     {
-        return $this->duty_timing;
+        return $this->dutytiming;
     }
 
-    public function setDutyTiming(string $duty_timing): self
+    public function setDutytiming(string $dutytiming): self
     {
-        $this->duty_timing = $duty_timing;
+        $this->dutytiming = $dutytiming;
 
         return $this;
     }
 
-    public function getSpecialisation(): ?string
+    public function getSpecilaisation(): ?string
     {
-        return $this->specialisation;
+        return $this->specilaisation;
     }
 
-    public function setSpecialisation(string $specialisation): self
+    public function setSpecilaisation(string $specilaisation): self
     {
-        $this->specialisation = $specialisation;
+        $this->specilaisation = $specilaisation;
 
         return $this;
     }
@@ -209,27 +230,27 @@ class Doctor
     /**
      * @return Collection|Appointment[]
      */
-    public function getYes(): Collection
+    public function getAppointments(): Collection
     {
-        return $this->yes;
+        return $this->appointments;
     }
 
-    public function addYe(Appointment $ye): self
+    public function addAppointment(Appointment $appointment): self
     {
-        if (!$this->yes->contains($ye)) {
-            $this->yes[] = $ye;
-            $ye->setDoctor($this);
+        if (!$this->appointments->contains($appointment)) {
+            $this->appointments[] = $appointment;
+            $appointment->setDoctor($this);
         }
 
         return $this;
     }
 
-    public function removeYe(Appointment $ye): self
+    public function removeAppointment(Appointment $appointment): self
     {
-        if ($this->yes->removeElement($ye)) {
+        if ($this->appointments->removeElement($appointment)) {
             // set the owning side to null (unless already changed)
-            if ($ye->getDoctor() === $this) {
-                $ye->setDoctor(null);
+            if ($appointment->getDoctor() === $this) {
+                $appointment->setDoctor(null);
             }
         }
 

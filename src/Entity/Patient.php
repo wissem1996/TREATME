@@ -7,9 +7,14 @@ use App\Repository\PatientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * normalizationContext={"groups"={"read"}},
+ * collectionOperations={"get","post"={"denormalization_context"={"groups"={"patient_write"}}}},
+ *  itemOperations={"get","put","patch","delete"}
+ * )
  * @ORM\Entity(repositoryClass=PatientRepository::class)
  */
 class Patient
@@ -18,47 +23,64 @@ class Patient
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
+     *@Groups({"patient_write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
+     * @Groups({"patient_write"})
+     * @Groups({"read:patient"})
      */
-    private $patient_name;
+    private $patientname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
+     * @Groups({"patient_write"})
      */
     private $gender;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
+     * @Groups({"patient_write"})
      */
-    private $Date_of_birth;
+    private $dateofbirth;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
+     * @Groups({"patient_write"})
      */
-    private $blood_group;
+    private $bloodgroup;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
+     * @Groups({"patient_write"})
      */
-    private $mobile_number;
+    private $mobilephone;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
+     * @Groups({"patient_write"})
      */
     private $email;
 
     /**
-     * @ORM\OneToMany(targetEntity=Appointment::class, mappedBy="Patient", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Appointment::class, mappedBy="patient")
+     * @Groups({"read"})
+     * @Groups({"patient_write"})
      */
-    private $yes;
+    private $appointments;
 
     public function __construct()
     {
-        $this->yes = new ArrayCollection();
+        $this->appointments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -66,14 +88,14 @@ class Patient
         return $this->id;
     }
 
-    public function getPatientName(): ?string
+    public function getPatientname(): ?string
     {
-        return $this->patient_name;
+        return $this->patientname;
     }
 
-    public function setPatientName(string $patient_name): self
+    public function setPatientname(string $patientname): self
     {
-        $this->patient_name = $patient_name;
+        $this->patientname = $patientname;
 
         return $this;
     }
@@ -90,38 +112,38 @@ class Patient
         return $this;
     }
 
-    public function getDateOfBirth(): ?string
+    public function getDateofbirth(): ?string
     {
-        return $this->Date_of_birth;
+        return $this->dateofbirth;
     }
 
-    public function setDateOfBirth(string $Date_of_birth): self
+    public function setDateofbirth(string $dateofbirth): self
     {
-        $this->Date_of_birth = $Date_of_birth;
+        $this->dateofbirth = $dateofbirth;
 
         return $this;
     }
 
-    public function getBloodGroup(): ?string
+    public function getBloodgroup(): ?string
     {
-        return $this->blood_group;
+        return $this->bloodgroup;
     }
 
-    public function setBloodGroup(string $blood_group): self
+    public function setBloodgroup(string $bloodgroup): self
     {
-        $this->blood_group = $blood_group;
+        $this->bloodgroup = $bloodgroup;
 
         return $this;
     }
 
-    public function getMobileNumber(): ?string
+    public function getMobilephone(): ?string
     {
-        return $this->mobile_number;
+        return $this->mobilephone;
     }
 
-    public function setMobileNumber(string $mobile_number): self
+    public function setMobilephone(string $mobilephone): self
     {
-        $this->mobile_number = $mobile_number;
+        $this->mobilephone = $mobilephone;
 
         return $this;
     }
@@ -141,27 +163,27 @@ class Patient
     /**
      * @return Collection|Appointment[]
      */
-    public function getYes(): Collection
+    public function getAppointments(): Collection
     {
-        return $this->yes;
+        return $this->appointments;
     }
 
-    public function addYe(Appointment $ye): self
+    public function addAppointment(Appointment $appointment): self
     {
-        if (!$this->yes->contains($ye)) {
-            $this->yes[] = $ye;
-            $ye->setPatient($this);
+        if (!$this->appointments->contains($appointment)) {
+            $this->appointments[] = $appointment;
+            $appointment->setPatient($this);
         }
 
         return $this;
     }
 
-    public function removeYe(Appointment $ye): self
+    public function removeAppointment(Appointment $appointment): self
     {
-        if ($this->yes->removeElement($ye)) {
+        if ($this->appointments->removeElement($appointment)) {
             // set the owning side to null (unless already changed)
-            if ($ye->getPatient() === $this) {
-                $ye->setPatient(null);
+            if ($appointment->getPatient() === $this) {
+                $appointment->setPatient(null);
             }
         }
 
