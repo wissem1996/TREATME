@@ -2,63 +2,77 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\PatientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
- * @ORM\Entity(repositoryClass=PatientRepository::class)
+ * Patient
+ *
+ * @ORM\Table(name="patient")
+ * @ORM\Entity
  */
 class Patient
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="patient_name", type="string", length=255, nullable=false)
      */
-    private $patient_name;
+    private $patientName;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=255, nullable=false)
      */
     private $gender;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="date_of_birth", type="string", length=255, nullable=false)
      */
-    private $Date_of_birth;
+    private $dateOfBirth;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="blood_group", type="string", length=255, nullable=false)
      */
-    private $blood_group;
+    private $bloodGroup;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="mobile_number", type="string", length=255, nullable=false)
      */
-    private $mobile_number;
+    private $mobileNumber;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=false)
      */
     private $email;
 
     /**
-     * @ORM\OneToMany(targetEntity=Appointment::class, mappedBy="Patient", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Payments::class, mappedBy="patient", orphanRemoval=true)
      */
-    private $yes;
+    private $payments;
 
     public function __construct()
     {
-        $this->yes = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -68,12 +82,12 @@ class Patient
 
     public function getPatientName(): ?string
     {
-        return $this->patient_name;
+        return $this->patientName;
     }
 
-    public function setPatientName(string $patient_name): self
+    public function setPatientName(string $patientName): self
     {
-        $this->patient_name = $patient_name;
+        $this->patientName = $patientName;
 
         return $this;
     }
@@ -92,36 +106,36 @@ class Patient
 
     public function getDateOfBirth(): ?string
     {
-        return $this->Date_of_birth;
+        return $this->dateOfBirth;
     }
 
-    public function setDateOfBirth(string $Date_of_birth): self
+    public function setDateOfBirth(string $dateOfBirth): self
     {
-        $this->Date_of_birth = $Date_of_birth;
+        $this->dateOfBirth = $dateOfBirth;
 
         return $this;
     }
 
     public function getBloodGroup(): ?string
     {
-        return $this->blood_group;
+        return $this->bloodGroup;
     }
 
-    public function setBloodGroup(string $blood_group): self
+    public function setBloodGroup(string $bloodGroup): self
     {
-        $this->blood_group = $blood_group;
+        $this->bloodGroup = $bloodGroup;
 
         return $this;
     }
 
     public function getMobileNumber(): ?string
     {
-        return $this->mobile_number;
+        return $this->mobileNumber;
     }
 
-    public function setMobileNumber(string $mobile_number): self
+    public function setMobileNumber(string $mobileNumber): self
     {
-        $this->mobile_number = $mobile_number;
+        $this->mobileNumber = $mobileNumber;
 
         return $this;
     }
@@ -139,32 +153,34 @@ class Patient
     }
 
     /**
-     * @return Collection|Appointment[]
+     * @return Collection|Payments[]
      */
-    public function getYes(): Collection
+    public function getPayments(): Collection
     {
-        return $this->yes;
+        return $this->payments;
     }
 
-    public function addYe(Appointment $ye): self
+    public function addPayment(Payments $payment): self
     {
-        if (!$this->yes->contains($ye)) {
-            $this->yes[] = $ye;
-            $ye->setPatient($this);
+        if (!$this->payments->contains($payment)) {
+            $this->payments[] = $payment;
+            $payment->setPatient($this);
         }
 
         return $this;
     }
 
-    public function removeYe(Appointment $ye): self
+    public function removePayment(Payments $payment): self
     {
-        if ($this->yes->removeElement($ye)) {
+        if ($this->payments->removeElement($payment)) {
             // set the owning side to null (unless already changed)
-            if ($ye->getPatient() === $this) {
-                $ye->setPatient(null);
+            if ($payment->getPatient() === $this) {
+                $payment->setPatient(null);
             }
         }
 
         return $this;
     }
+
+
 }

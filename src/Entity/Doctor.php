@@ -2,84 +2,94 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\DoctorRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
- * @ORM\Entity(repositoryClass=DoctorRepository::class)
+ * Doctor
+ *
+ * @ORM\Table(name="doctor")
+ * @ORM\Entity
  */
 class Doctor
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="doctor_name", type="string", length=255, nullable=false)
      */
-    private $doctor_name;
+    private $doctorName;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=255, nullable=false)
      */
     private $gender;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="mobile_phone", type="string", length=255, nullable=false)
      */
-    private $mobile_phone;
+    private $mobilePhone;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=false)
      */
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="department", type="string", length=255, nullable=false)
      */
     private $department;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="education", type="string", length=255, nullable=false)
      */
     private $education;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="experience", type="string", length=255, nullable=false)
      */
     private $experience;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="designation", type="string", length=255, nullable=false)
      */
     private $designation;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="duty_timing", type="string", length=255, nullable=false)
      */
-    private $duty_timing;
+    private $dutyTiming;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="specialisation", type="string", length=255, nullable=false)
      */
     private $specialisation;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Appointment::class, mappedBy="Doctor", orphanRemoval=true)
-     */
-    private $yes;
-
-    public function __construct()
-    {
-        $this->yes = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -88,12 +98,12 @@ class Doctor
 
     public function getDoctorName(): ?string
     {
-        return $this->doctor_name;
+        return $this->doctorName;
     }
 
-    public function setDoctorName(string $doctor_name): self
+    public function setDoctorName(string $doctorName): self
     {
-        $this->doctor_name = $doctor_name;
+        $this->doctorName = $doctorName;
 
         return $this;
     }
@@ -112,12 +122,12 @@ class Doctor
 
     public function getMobilePhone(): ?string
     {
-        return $this->mobile_phone;
+        return $this->mobilePhone;
     }
 
-    public function setMobilePhone(string $mobile_phone): self
+    public function setMobilePhone(string $mobilePhone): self
     {
-        $this->mobile_phone = $mobile_phone;
+        $this->mobilePhone = $mobilePhone;
 
         return $this;
     }
@@ -184,12 +194,12 @@ class Doctor
 
     public function getDutyTiming(): ?string
     {
-        return $this->duty_timing;
+        return $this->dutyTiming;
     }
 
-    public function setDutyTiming(string $duty_timing): self
+    public function setDutyTiming(string $dutyTiming): self
     {
-        $this->duty_timing = $duty_timing;
+        $this->dutyTiming = $dutyTiming;
 
         return $this;
     }
@@ -206,33 +216,5 @@ class Doctor
         return $this;
     }
 
-    /**
-     * @return Collection|Appointment[]
-     */
-    public function getYes(): Collection
-    {
-        return $this->yes;
-    }
 
-    public function addYe(Appointment $ye): self
-    {
-        if (!$this->yes->contains($ye)) {
-            $this->yes[] = $ye;
-            $ye->setDoctor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeYe(Appointment $ye): self
-    {
-        if ($this->yes->removeElement($ye)) {
-            // set the owning side to null (unless already changed)
-            if ($ye->getDoctor() === $this) {
-                $ye->setDoctor(null);
-            }
-        }
-
-        return $this;
-    }
 }
