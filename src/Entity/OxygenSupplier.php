@@ -2,48 +2,56 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\OxygenSupplierRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
- * @ORM\Entity(repositoryClass=OxygenSupplierRepository::class)
+ * OxygenSupplier
+ *
+ * @ORM\Table(name="oxygen_supplier")
+ * @ORM\Entity
  */
 class OxygenSupplier
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="contact", type="string", length=255, nullable=false)
      */
     private $contact;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="location", type="string", length=255, nullable=false)
      */
     private $location;
 
     /**
-     * @ORM\OneToMany(targetEntity=Oxygene::class, mappedBy="supplier")
+     * @ORM\OneToMany(targetEntity=Payments::class, mappedBy="supplier", orphanRemoval=true)
      */
-    private $oxygenes;
+    private $payments;
 
     public function __construct()
     {
-        $this->oxygenes = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -88,32 +96,34 @@ class OxygenSupplier
     }
 
     /**
-     * @return Collection|Oxygene[]
+     * @return Collection|Payments[]
      */
-    public function getOxygenes(): Collection
+    public function getPayments(): Collection
     {
-        return $this->oxygenes;
+        return $this->payments;
     }
 
-    public function addOxygene(Oxygene $oxygene): self
+    public function addPayment(Payments $payment): self
     {
-        if (!$this->oxygenes->contains($oxygene)) {
-            $this->oxygenes[] = $oxygene;
-            $oxygene->setSupplier($this);
+        if (!$this->payments->contains($payment)) {
+            $this->payments[] = $payment;
+            $payment->setSupplier($this);
         }
 
         return $this;
     }
 
-    public function removeOxygene(Oxygene $oxygene): self
+    public function removePayment(Payments $payment): self
     {
-        if ($this->oxygenes->removeElement($oxygene)) {
+        if ($this->payments->removeElement($payment)) {
             // set the owning side to null (unless already changed)
-            if ($oxygene->getSupplier() === $this) {
-                $oxygene->setSupplier(null);
+            if ($payment->getSupplier() === $this) {
+                $payment->setSupplier(null);
             }
         }
 
         return $this;
     }
+
+
 }
