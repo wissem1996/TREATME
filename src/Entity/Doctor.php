@@ -11,11 +11,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- * normalizationContext={"groups"={"read:doctor:collections"}},
- * collectionOperations={"get","post"={"denormalization_context"={"groups"={"write : doctor"}}}
+ * 
+ * collectionOperations={"get"={"normalization_context"={"groups"={"read:workday","read:doctor:collections","readappointments"}}}
+ * ,"post"={"denormalization_context"={"groups"={"write : doctor"}}}
  * 
  * },
- *  itemOperations={"get"={"normalization_context"={"groups"={"read:doctor:item" , "readappointments"}}},
+ *  itemOperations={"get"={"normalization_context"={"groups"={"read:doctor:item" ,"read:workday","readappointments"}}},
  * "put","patch"={"denormalization_context"={"groups"={"update : doctor"}}}
  * ,"delete"}
  * )
@@ -97,9 +98,22 @@ class Doctor
      */
     private $appointments;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read:doctor","read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})s
+     */
+    private $text;
+
+    /**
+     * @ORM\OneToMany(targetEntity=WorkDays::class, mappedBy="Doctor")
+     * @Groups({"read:doctor","read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
+     */
+    private $workDays;
+
     public function __construct()
     {
         $this->appointments = new ArrayCollection();
+        $this->workDays = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -251,6 +265,48 @@ class Doctor
             // set the owning side to null (unless already changed)
             if ($appointment->getDoctor() === $this) {
                 $appointment->setDoctor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getText(): ?string
+    {
+        return $this->text;
+    }
+
+    public function setText(string $text): self
+    {
+        $this->text = $text;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|WorkDays[]
+     */
+    public function getWorkDays(): Collection
+    {
+        return $this->workDays;
+    }
+
+    public function addWorkDay(WorkDays $workDay): self
+    {
+        if (!$this->workDays->contains($workDay)) {
+            $this->workDays[] = $workDay;
+            $workDay->setDoctor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkDay(WorkDays $workDay): self
+    {
+        if ($this->workDays->removeElement($workDay)) {
+            // set the owning side to null (unless already changed)
+            if ($workDay->getDoctor() === $this) {
+                $workDay->setDoctor(null);
             }
         }
 
