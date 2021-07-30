@@ -110,6 +110,18 @@ class Doctor
      */
     private $workDays;
 
+    /**
+     * @ORM\Column(type="integer")
+     * @Groups({"read:doctor","read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
+     */
+    private $departmentid;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read:doctor","read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
+     */
+    private $availibility;
+
     public function __construct()
     {
         $this->appointments = new ArrayCollection();
@@ -309,6 +321,30 @@ class Doctor
                 $workDay->setDoctor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDepartmentid(): ?int
+    {
+        return $this->departmentid;
+    }
+
+    public function setDepartmentid(int $departmentid): self
+    {
+        $this->departmentid = $departmentid;
+
+        return $this;
+    }
+
+    public function getAvailibility(): ?string
+    {
+        return $this->availibility;
+    }
+
+    public function setAvailibility(string $availibility): self
+    {
+        $this->availibility = $availibility;
 
         return $this;
     }
