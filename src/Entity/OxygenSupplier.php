@@ -36,15 +36,7 @@ class OxygenSupplier
      */
     private $location;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Oxygene::class, mappedBy="supplier")
-     */
-    private $oxygenes;
-
-    public function __construct()
-    {
-        $this->oxygenes = new ArrayCollection();
-    }
+  
 
     public function getId(): ?int
     {
@@ -87,33 +79,4 @@ class OxygenSupplier
         return $this;
     }
 
-    /**
-     * @return Collection|Oxygene[]
-     */
-    public function getOxygenes(): Collection
-    {
-        return $this->oxygenes;
-    }
-
-    public function addOxygene(Oxygene $oxygene): self
-    {
-        if (!$this->oxygenes->contains($oxygene)) {
-            $this->oxygenes[] = $oxygene;
-            $oxygene->setSupplier($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOxygene(Oxygene $oxygene): self
-    {
-        if ($this->oxygenes->removeElement($oxygene)) {
-            // set the owning side to null (unless already changed)
-            if ($oxygene->getSupplier() === $this) {
-                $oxygene->setSupplier(null);
-            }
-        }
-
-        return $this;
-    }
 }
