@@ -26,19 +26,39 @@ class PaymentsController extends AbstractController
     }
 
     /**
+     * @Route("/payment/{id}", name="get_payment_by_id", methods={"GET"})
+     */
+    public function getPaymentById($id): JsonResponse
+    {
+        $payment = $this->getDoctrine()->getRepository(Payments::class)->findOneBy(['id' => $id]);
+            $data = [
+                'id' => $payment->getId(),
+                'patient' => $payment->getPatient()->getId(),
+                'supplier' => $payment->getSupplier()->getId(),
+                'oxygen' => $payment->getOxygen()->getId(),
+                'date' => $payment->getCreatedAt()->format('d/m/Y'),
+                'price' => $payment->getPrice(),
+                'tax' => $payment->getTax(),
+                'total' => $payment->getTotal()
+            ];
+        $response = new JsonResponse($data, Response::HTTP_OK);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+    }
+
+    /**
      * @Route("/payments/all", name="get_all_payments", methods={"GET"})
      */
     public function getAll(): JsonResponse
     {
         $payments = $this->getDoctrine()->getRepository(Payments::class)->findAll();
-        $data = [];
 
         foreach ($payments as $payment) {
             $data[] = [
                 'id' => $payment->getId(),
                 'patient' => $payment->getPatient()->getPatientName(),
                 'supplier' => $payment->getSupplier()->getName(),
-                'oxygen' => $payment->getOxygen()->getID(),
+                'oxygen' => $payment->getOxygen()->getId(),
                 'date' => $payment->getCreatedAt()->format('d/m/Y'),
                 'price' => $payment->getPrice(),
                 'tax' => $payment->getTax(),
@@ -81,6 +101,68 @@ class PaymentsController extends AbstractController
         $em->persist($oxygen);
         $em->flush();
         $response = new JsonResponse($data, Response::HTTP_OK);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+    }
+
+    /**
+     * @Route("/payment/update/{id}", name="update_payment", methods={"PUT"})
+     */
+    public function update($id, Request $request): JsonResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $payment = $em->getRepository(Payments::class)->findOneBy(['id' => $id]);
+        $data = json_decode($request->getContent(), true);
+        $patient = $em->getRepository(Patient::class)->find($data['patientId']);
+
+        $payment->setPatient($patient);
+        $payment->setPrice($data['price']);
+        $payment->setTax($data['tax']);
+        $payment->setTotal($data['total']);
+
+        if ($data['oxygenId'] !== null) {
+            $supplier = $em->getRepository(OxygenSupplier::class)->find($data['supplierId']);
+            $payment->setSupplier($supplier);
+
+            $oldOxygen = $em->getRepository(Oxygene::class)->find($payment->getOxygen()->getId());
+            $oldOxygen->setStatus('Available');
+            $em->persist($oldOxygen);
+            $em->flush();
+
+            $oxygen = $em->getRepository(Oxygene::class)->find($data['oxygenId']);
+            $oxygen->setStatus('Sold');
+            $em->persist($oxygen);
+            $em->flush();
+
+            $payment->setOxygen($oxygen);
+
+        }
+
+        $em->persist($payment);
+        $em->flush();
+
+        $response = new JsonResponse($data, Response::HTTP_OK);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+    }
+
+    /**
+     * @Route("/payments/delete/{id}", name="delete_payment", methods={"DELETE"})
+     */
+    public function delete($id): JsonResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $payment = $em->getRepository(Payments::class)->findOneBy(['id' => $id]);
+
+        $oxygen = $payment->getOxygen();
+        $oxygen->setStatus('Available');
+
+        $em->remove($payment);
+        $em->persist($oxygen);
+        $em->flush();
+
+        $response = new JsonResponse(['status' => 'Payment deleted'], Response::HTTP_NO_CONTENT);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response;
     }
 }
