@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -44,16 +42,6 @@ class OxygenSupplier
      */
     private $location;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Payments::class, mappedBy="supplier", orphanRemoval=true)
-     */
-    private $payments;
-
-    public function __construct()
-    {
-        $this->payments = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -91,36 +79,6 @@ class OxygenSupplier
     public function setLocation(string $location): self
     {
         $this->location = $location;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Payments[]
-     */
-    public function getPayments(): Collection
-    {
-        return $this->payments;
-    }
-
-    public function addPayment(Payments $payment): self
-    {
-        if (!$this->payments->contains($payment)) {
-            $this->payments[] = $payment;
-            $payment->setSupplier($this);
-        }
-
-        return $this;
-    }
-
-    public function removePayment(Payments $payment): self
-    {
-        if ($this->payments->removeElement($payment)) {
-            // set the owning side to null (unless already changed)
-            if ($payment->getSupplier() === $this) {
-                $payment->setSupplier(null);
-            }
-        }
 
         return $this;
     }

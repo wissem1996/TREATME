@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -64,16 +62,6 @@ class Patient
      * @ORM\Column(name="email", type="string", length=255, nullable=false)
      */
     private $email;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Payments::class, mappedBy="patient", orphanRemoval=true)
-     */
-    private $payments;
-
-    public function __construct()
-    {
-        $this->payments = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -148,36 +136,6 @@ class Patient
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Payments[]
-     */
-    public function getPayments(): Collection
-    {
-        return $this->payments;
-    }
-
-    public function addPayment(Payments $payment): self
-    {
-        if (!$this->payments->contains($payment)) {
-            $this->payments[] = $payment;
-            $payment->setPatient($this);
-        }
-
-        return $this;
-    }
-
-    public function removePayment(Payments $payment): self
-    {
-        if ($this->payments->removeElement($payment)) {
-            // set the owning side to null (unless already changed)
-            if ($payment->getPatient() === $this) {
-                $payment->setPatient(null);
-            }
-        }
 
         return $this;
     }

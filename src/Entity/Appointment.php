@@ -29,25 +29,25 @@ class Appointment
     private $title;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="start_date", type="datetime", nullable=false)
+     * @ORM\Column(name="startdate", type="string", length=255, nullable=false)
      */
-    private $startDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="end_date", type="datetime", nullable=false)
-     */
-    private $endDate;
+    private $startdate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="repeat_time", type="string", length=255, nullable=false)
+     * @ORM\Column(name="enddate", type="string", length=255, nullable=false)
      */
-    private $repeatTime;
+    private $enddate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="repeattime", type="string", length=255, nullable=false)
+     */
+    private $repeattime;
 
     /**
      * @var string
@@ -100,38 +100,38 @@ class Appointment
         return $this;
     }
 
-    public function getStartDate(): ?\DateTimeInterface
+    public function getStartdate(): ?string
     {
-        return $this->startDate;
+        return $this->startdate;
     }
 
-    public function setStartDate(\DateTimeInterface $startDate): self
+    public function setStartdate(string $startdate): self
     {
-        $this->startDate = $startDate;
+        $this->startdate = $startdate;
 
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeInterface
+    public function getEnddate(): ?string
     {
-        return $this->endDate;
+        return $this->enddate;
     }
 
-    public function setEndDate(\DateTimeInterface $endDate): self
+    public function setEnddate(string $enddate): self
     {
-        $this->endDate = $endDate;
+        $this->enddate = $enddate;
 
         return $this;
     }
 
-    public function getRepeatTime(): ?string
+    public function getRepeattime(): ?string
     {
-        return $this->repeatTime;
+        return $this->repeattime;
     }
 
-    public function setRepeatTime(string $repeatTime): self
+    public function setRepeattime(string $repeattime): self
     {
-        $this->repeatTime = $repeatTime;
+        $this->repeattime = $repeattime;
 
         return $this;
     }

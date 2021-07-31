@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -62,14 +60,9 @@ class Oxygene
     private $supplier;
 
     /**
-     * @ORM\OneToMany(targetEntity=Payments::class, mappedBy="oxygen", orphanRemoval=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $payments;
-
-    public function __construct()
-    {
-        $this->payments = new ArrayCollection();
-    }
+    private $image;
 
     public function getId(): ?int
     {
@@ -136,32 +129,14 @@ class Oxygene
         return $this;
     }
 
-    /**
-     * @return Collection|Payments[]
-     */
-    public function getPayments(): Collection
+    public function getImage(): ?string
     {
-        return $this->payments;
+        return $this->image;
     }
 
-    public function addPayment(Payments $payment): self
+    public function setImage(string $image): self
     {
-        if (!$this->payments->contains($payment)) {
-            $this->payments[] = $payment;
-            $payment->setOxygen($this);
-        }
-
-        return $this;
-    }
-
-    public function removePayment(Payments $payment): self
-    {
-        if ($this->payments->removeElement($payment)) {
-            // set the owning side to null (unless already changed)
-            if ($payment->getOxygen() === $this) {
-                $payment->setOxygen(null);
-            }
-        }
+        $this->image = $image;
 
         return $this;
     }

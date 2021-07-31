@@ -24,9 +24,9 @@ class Doctor
     /**
      * @var string
      *
-     * @ORM\Column(name="doctor_name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="doctorname", type="string", length=255, nullable=false)
      */
-    private $doctorName;
+    private $doctorname;
 
     /**
      * @var string
@@ -38,9 +38,9 @@ class Doctor
     /**
      * @var string
      *
-     * @ORM\Column(name="mobile_phone", type="string", length=255, nullable=false)
+     * @ORM\Column(name="mobilephone", type="string", length=255, nullable=false)
      */
-    private $mobilePhone;
+    private $mobilephone;
 
     /**
      * @var string
@@ -52,9 +52,9 @@ class Doctor
     /**
      * @var string
      *
-     * @ORM\Column(name="department", type="string", length=255, nullable=false)
+     * @ORM\Column(name="departement", type="string", length=255, nullable=false)
      */
-    private $department;
+    private $departement;
 
     /**
      * @var string
@@ -80,30 +80,30 @@ class Doctor
     /**
      * @var string
      *
-     * @ORM\Column(name="duty_timing", type="string", length=255, nullable=false)
+     * @ORM\Column(name="dutytiming", type="string", length=255, nullable=false)
      */
-    private $dutyTiming;
+    private $dutytiming;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="specialisation", type="string", length=255, nullable=false)
+     * @ORM\Column(name="specilaisation", type="string", length=255, nullable=false)
      */
-    private $specialisation;
+    private $specilaisation;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDoctorName(): ?string
+    public function getDoctorname(): ?string
     {
-        return $this->doctorName;
+        return $this->doctorname;
     }
 
-    public function setDoctorName(string $doctorName): self
+    public function setDoctorname(string $doctorname): self
     {
-        $this->doctorName = $doctorName;
+        $this->doctorname = $doctorname;
 
         return $this;
     }
@@ -120,14 +120,14 @@ class Doctor
         return $this;
     }
 
-    public function getMobilePhone(): ?string
+    public function getMobilephone(): ?string
     {
-        return $this->mobilePhone;
+        return $this->mobilephone;
     }
 
-    public function setMobilePhone(string $mobilePhone): self
+    public function setMobilephone(string $mobilephone): self
     {
-        $this->mobilePhone = $mobilePhone;
+        $this->mobilephone = $mobilephone;
 
         return $this;
     }
@@ -144,14 +144,14 @@ class Doctor
         return $this;
     }
 
-    public function getDepartment(): ?string
+    public function getDepartement(): ?string
     {
-        return $this->department;
+        return $this->departement;
     }
 
-    public function setDepartment(string $department): self
+    public function setDepartement(string $departement): self
     {
-        $this->department = $department;
+        $this->departement = $departement;
 
         return $this;
     }
@@ -192,26 +192,26 @@ class Doctor
         return $this;
     }
 
-    public function getDutyTiming(): ?string
+    public function getDutytiming(): ?string
     {
-        return $this->dutyTiming;
+        return $this->dutytiming;
     }
 
-    public function setDutyTiming(string $dutyTiming): self
+    public function setDutytiming(string $dutytiming): self
     {
-        $this->dutyTiming = $dutyTiming;
+        $this->dutytiming = $dutytiming;
 
         return $this;
     }
 
-    public function getSpecialisation(): ?string
+    public function getSpecilaisation(): ?string
     {
-        return $this->specialisation;
+        return $this->specilaisation;
     }
 
-    public function setSpecialisation(string $specialisation): self
+    public function setSpecilaisation(string $specilaisation): self
     {
-        $this->specialisation = $specialisation;
+        $this->specilaisation = $specilaisation;
 
         return $this;
     }
