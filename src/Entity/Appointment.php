@@ -69,8 +69,7 @@ class Appointment
      * @ORM\Column(type="string", length=255)
      * @Groups({"read:appointment:item","read:appointment","write : appointment","update : appointment"})
      */
-    private $symptom;
-
+    private $symptoms;
     /**
      * @ORM\Column(type="string", length=255)
      *@Groups({"read:appointment:item","read:appointment","write : appointment","update : appointment"})

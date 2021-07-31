@@ -70,6 +70,45 @@ class Patient
      * @Groups({"patient_write"})
      */
     private $email;
+    
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
+     * @Groups({"patient_write"})
+     */
+    private $text;
+    
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
+     * @Groups({"patient_write"})
+     */
+    private $Address;
+        
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
+     * @Groups({"patient_write"})
+     */
+    private $Disease;
+        /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
+     * @Groups({"patient_write"})
+     */
+    private $DepartmentName;
+     /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
+     * @Groups({"patient_write"})
+     */
+    private $BloodGroup;
+     /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
+     * @Groups({"patient_write"})
+     */
+    private $Symptoms;
 
     /**
      * @ORM\OneToMany(targetEntity=Appointment::class, mappedBy="patient")

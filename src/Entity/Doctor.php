@@ -122,6 +122,28 @@ class Doctor
      */
     private $availibility;
 
+    
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read:doctor","read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
+     */
+    private $color;
+        /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read:doctor","read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
+     */
+    private $StartHour;
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read:doctor","read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
+     */
+    private $EndHour;
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read:doctor","read:doctor:collections","write : doctor","read:doctor:item","update : doctor"})
+     */
+    private $AvailableDays;
+
     public function __construct()
     {
         $this->appointments = new ArrayCollection();
